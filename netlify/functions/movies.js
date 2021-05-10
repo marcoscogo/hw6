@@ -25,7 +25,7 @@ exports.handler = async function(event) {
   if (year == undefined || genre == undefined) {
     return {
       statusCode: 200, // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-      body: `Nope!` // a string of data
+      body: `Search not found!` // a string of data
     }
   }
   else {
@@ -35,13 +35,23 @@ exports.handler = async function(event) {
     }
 
     for (let i=0; i < moviesFromCsv.length; i++) {
-
+      // store values in memory
+      let movie = moviesFromCsv[i]
+      // only pull searched movies
+      if (movie.startYear == year && movie.genres.includes(genre) && movie.runtimeMinutes != `\\N` && movie.genres != `\\N`) {
+        movie = {
+          title: movie.primaryTitle,
+          year: movie.startYear,
+          genres: movie.genres
+        }
+        // return value for appropriate movies
+        returnValue.movies.push(movie)
     }
 
     // a lambda function returns a status code and a string of data
     return {
       statusCode: 200, // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-      body: `Hello from the back-end!` // a string of data
+      body: JSON.stringify(returnValue) // a string of data
     }
   }
 }
