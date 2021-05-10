@@ -35,20 +35,23 @@ exports.handler = async function(event) {
     }
 
     for (let i=0; i < moviesFromCsv.length; i++) {
-      // store values in memory
+      // store value to memory
       let movie = moviesFromCsv[i]
-      // only pull searched movies
+      // only show applicable
       if (movie.startYear == year && movie.genres.includes(genre) && movie.runtimeMinutes != `\\N` && movie.genres != `\\N`) {
         movie = {
           title: movie.primaryTitle,
           year: movie.startYear,
           genres: movie.genres
         }
-        // return value for appropriate movies
+        // store movie value
         returnValue.movies.push(movie)
+      }
     }
 
-    
+    // show appropriate result count
+    returnValue.numResults = returnValue.movies.length
+
     // a lambda function returns a status code and a string of data
     return {
       statusCode: 200, // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
